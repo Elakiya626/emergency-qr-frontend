@@ -9,7 +9,7 @@ const ScanResult = () => {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:5000/api/auth/qr/${qrId}`)
+      .get(`http://10.55.27.22:5000/api/auth/qr/${qrId}`)
       .then((res) => setPatient(res.data))
       .catch(() => setError("Invalid or expired QR"));
   }, [qrId]);

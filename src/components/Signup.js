@@ -22,7 +22,7 @@ const Signup = () => {
 
     try {
       await axios.post(
-        "http://localhost:5000/api/auth/register",
+        "http://10.55.27.22:5000/api/auth/register",
         form
       );
 

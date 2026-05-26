@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { API_BASE_URL } from "../config";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -10,11 +11,11 @@ const Login = () => {
     password: "",
   });
 
-  const [error, setError] = useState(""); // ✅ for showing errors
+  const [error, setError] = useState("");
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
-    setError(""); // reset error when typing
+    setError("");
   };
 
   const handleSubmit = async (e) => {
@@ -27,16 +28,17 @@ const Login = () => {
 
     try {
       const res = await axios.post(
-        "http://localhost:5000/api/auth/login",
+        `${API_BASE_URL}/api/auth/login`,
         form
       );
 
-      // ✅ Redirect to PatientForm with username
       navigate("/patient-form", {
-        state: { username: form.username, qrId: res.data.qrId },
+        state: {
+          username: form.username,
+          qrId: res.data.qrId,
+        },
       });
     } catch (err) {
-      // Show backend error or default
       setError(err.response?.data?.message || "Login failed");
     }
   };
@@ -55,7 +57,6 @@ const Login = () => {
             placeholder="Username"
             value={form.username}
             onChange={handleChange}
-            required
             className="px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-400"
           />
 
@@ -65,7 +66,6 @@ const Login = () => {
             placeholder="Password"
             value={form.password}
             onChange={handleChange}
-            required
             className="px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-400"
           />
 
@@ -76,8 +76,9 @@ const Login = () => {
             Login
           </button>
 
-          {/* ✅ Show error message */}
-          {error && <p className="text-red-500 text-center mt-2">{error}</p>}
+          {error && (
+            <p className="text-red-500 text-center mt-2">{error}</p>
+          )}
         </form>
       </div>
     </div>

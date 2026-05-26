@@ -4,22 +4,43 @@ import { useLocation } from "react-router-dom";
 import QRCode from "react-qr-code";
 
 const PatientForm = () => {
+
   const location = useLocation();
   const username = location.state?.username;
 
   const [form, setForm] = useState({
+    fullName: "",
+    age: "",
+    gender: "",
     bloodGroup: "",
+
     allergies: "",
     chronicDiseases: "",
-    sugarLevel: "",
     medicines: "",
+    surgeries: "",
+
+    diabetic: "",
+    heartDisease: "",
+    asthma: "",
+    epilepsy: "",
+
+    implants: "",
+    bloodThinners: "",
+
+    emergencyContactName: "",
+    relationship: "",
     emergencyContact: "",
+
+    emergencyNotes: "",
   });
 
   const [qrId, setQrId] = useState(null);
 
   const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
+    setForm({
+      ...form,
+      [e.target.name]: e.target.value,
+    });
   };
 
   const handleSubmit = async (e) => {
@@ -31,8 +52,9 @@ const PatientForm = () => {
     }
 
     try {
+
       const res = await axios.post(
-        "http://localhost:5000/api/auth/patient-details",
+        "http://10.55.27.22:5000/api/auth/patient-details",
         {
           username,
           ...form,
@@ -40,103 +62,345 @@ const PatientForm = () => {
       );
 
       setQrId(res.data.qrId);
-      alert("Patient details saved & QR generated!");
+
+      alert("Emergency details saved successfully!");
+
     } catch (err) {
-      alert(err.response?.data?.message || "Failed to save details");
+
+      alert(
+        err.response?.data?.message ||
+        "Failed to save details"
+      );
+
     }
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100 p-4">
-      <div className="bg-white p-8 rounded-xl shadow-lg w-full max-w-md">
+    <div className="min-h-screen bg-gradient-to-br from-indigo-100 via-white to-red-100 py-10 px-5 flex justify-center">
 
-        <h2 className="text-2xl font-bold text-center mb-6">
-          Patient Medical Details
-        </h2>
+      <div className="bg-white shadow-2xl rounded-[35px] p-8 w-full max-w-6xl">
+
+        {/* TITLE */}
+        <div className="text-center mb-10">
+
+          <h1 className="text-5xl font-extrabold text-indigo-700">
+            🚑 Emergency Medical Form
+          </h1>
+
+          <p className="text-gray-500 mt-3">
+            Government Emergency Healthcare Information System
+          </p>
+
+        </div>
 
         {/* FORM */}
-        <form onSubmit={handleSubmit} className="flex flex-col gap-3">
-          {Object.keys(form).map((key) => (
-            <input
-              key={key}
-              name={key}
-              placeholder={key}
-              value={form[key]}
-              onChange={handleChange}
-              required
-              className="border px-4 py-2 rounded focus:outline-none focus:ring-2 focus:ring-purple-500"
-            />
-          ))}
+        <form
+          onSubmit={handleSubmit}
+          className="grid md:grid-cols-2 gap-5"
+        >
 
+          {/* PERSONAL DETAILS */}
+
+          <input
+            type="text"
+            name="fullName"
+            placeholder="Full Name"
+            onChange={handleChange}
+            required
+            className="border p-4 rounded-2xl"
+          />
+
+          <input
+            type="number"
+            name="age"
+            placeholder="Age"
+            onChange={handleChange}
+            required
+            className="border p-4 rounded-2xl"
+          />
+
+          <select
+            name="gender"
+            onChange={handleChange}
+            className="border p-4 rounded-2xl"
+          >
+            <option>Gender</option>
+            <option>Male</option>
+            <option>Female</option>
+            <option>Other</option>
+          </select>
+
+          <input
+            type="text"
+            name="bloodGroup"
+            placeholder="Blood Group"
+            onChange={handleChange}
+            className="border p-4 rounded-2xl"
+          />
+
+          {/* CRITICAL CONDITIONS */}
+
+          <textarea
+            name="allergies"
+            placeholder="Allergies"
+            onChange={handleChange}
+            className="border p-4 rounded-2xl"
+          />
+
+          <textarea
+            name="chronicDiseases"
+            placeholder="Chronic Diseases"
+            onChange={handleChange}
+            className="border p-4 rounded-2xl"
+          />
+
+          <textarea
+            name="medicines"
+            placeholder="Current Medicines"
+            onChange={handleChange}
+            className="border p-4 rounded-2xl"
+          />
+
+          <textarea
+            name="surgeries"
+            placeholder="Past Surgeries"
+            onChange={handleChange}
+            className="border p-4 rounded-2xl"
+          />
+
+          {/* SPECIAL CONDITIONS */}
+
+          <input
+            type="text"
+            name="diabetic"
+            placeholder="Diabetic (Yes/No)"
+            onChange={handleChange}
+            className="border p-4 rounded-2xl"
+          />
+
+          <input
+            type="text"
+            name="heartDisease"
+            placeholder="Heart Disease"
+            onChange={handleChange}
+            className="border p-4 rounded-2xl"
+          />
+
+          <input
+            type="text"
+            name="asthma"
+            placeholder="Asthma"
+            onChange={handleChange}
+            className="border p-4 rounded-2xl"
+          />
+
+          <input
+            type="text"
+            name="epilepsy"
+            placeholder="Epilepsy"
+            onChange={handleChange}
+            className="border p-4 rounded-2xl"
+          />
+
+          <textarea
+            name="implants"
+            placeholder="Pacemaker / Implants"
+            onChange={handleChange}
+            className="border p-4 rounded-2xl"
+          />
+
+          <textarea
+            name="bloodThinners"
+            placeholder="Blood Thinners"
+            onChange={handleChange}
+            className="border p-4 rounded-2xl"
+          />
+
+          {/* EMERGENCY CONTACT */}
+
+          <input
+            type="text"
+            name="emergencyContactName"
+            placeholder="Emergency Contact Name"
+            onChange={handleChange}
+            className="border p-4 rounded-2xl"
+          />
+
+          <input
+            type="text"
+            name="relationship"
+            placeholder="Relationship"
+            onChange={handleChange}
+            className="border p-4 rounded-2xl"
+          />
+
+          <input
+            type="text"
+            name="emergencyContact"
+            placeholder="Emergency Contact Number"
+            onChange={handleChange}
+            className="border p-4 rounded-2xl"
+          />
+
+          <textarea
+            name="emergencyNotes"
+            placeholder="Emergency Notes"
+            onChange={handleChange}
+            className="border p-4 rounded-2xl"
+          />
+
+          {/* BUTTON */}
           <button
             type="submit"
-            className="bg-purple-700 text-white py-3 rounded hover:bg-purple-800 transition"
+            className="md:col-span-2 bg-indigo-600 hover:bg-indigo-700 text-white py-5 rounded-2xl text-xl font-bold shadow-xl"
           >
-            Save & Generate QR
+            Save & Generate Emergency QR
           </button>
+
         </form>
 
         {/* QR CARD */}
         {qrId && (
-          <div className="mt-8 text-center">
-            <h3 className="font-bold text-lg mb-3">
-              Emergency QR ID Card
-            </h3>
 
-            <div className="border rounded-xl p-4 shadow-md bg-gray-50">
-              <p className="font-semibold mb-1">Username: {username}</p>
+          <div className="mt-12">
 
-              <p className="text-red-600 font-bold text-xl mb-2">
-                Blood Group: {form.bloodGroup}
-              </p>
+            <div className="bg-gradient-to-r from-red-600 to-indigo-700 text-white rounded-[35px] p-8 shadow-2xl">
 
-              <QRCode
-                value={`http://localhost:3000/scan/${qrId}`}
-                size={180}
-              />
+              <div className="flex flex-col md:flex-row justify-between items-center gap-8">
 
-              <p className="mt-3 font-medium">
-                📞 Emergency Contact: {form.emergencyContact}
-              </p>
+                {/* LEFT SIDE */}
+                <div>
 
-              <p className="text-xs text-gray-500 mt-2">
-                Scan this QR to view full medical details
-              </p>
+                  <h2 className="text-4xl font-extrabold mb-3">
+                    🚑 Emergency QR Card
+                  </h2>
+
+                  <p className="text-lg mb-6">
+                    Emergency Medical Identification
+                  </p>
+
+                  <div className="space-y-3">
+
+                    <p>
+                      <span className="font-bold">
+                        Name:
+                      </span>{" "}
+                      {form.fullName}
+                    </p>
+
+                    <p>
+                      <span className="font-bold">
+                        Blood Group:
+                      </span>{" "}
+                      {form.bloodGroup}
+                    </p>
+
+                    <p>
+                      <span className="font-bold">
+                        Emergency Contact:
+                      </span>{" "}
+                      {form.emergencyContact}
+                    </p>
+
+                  </div>
+
+                </div>
+
+                {/* QR */}
+                <div className="bg-white p-5 rounded-3xl shadow-xl">
+
+                  <QRCode
+                    value={`http://10.55.27.22:3000/scan/${qrId}`}
+                    size={220}
+                  />
+
+                </div>
+
+              </div>
+
             </div>
 
-            <button
-  onClick={() => {
-    const data = `
-Emergency Medical Details
+            {/* DOWNLOAD BUTTON */}
+            <div className="text-center mt-8">
+
+              <button
+                onClick={() => {
+
+                  const data = `
+EMERGENCY MEDICAL DETAILS
 -------------------------
-Name: ${username}
+
+Full Name: ${form.fullName}
+
+Age: ${form.age}
+
+Gender: ${form.gender}
+
 Blood Group: ${form.bloodGroup}
+
 Allergies: ${form.allergies}
+
 Chronic Diseases: ${form.chronicDiseases}
-Sugar Level: ${form.sugarLevel}
+
 Medicines: ${form.medicines}
+
+Surgeries: ${form.surgeries}
+
+Diabetic: ${form.diabetic}
+
+Heart Disease: ${form.heartDisease}
+
+Asthma: ${form.asthma}
+
+Epilepsy: ${form.epilepsy}
+
+Implants: ${form.implants}
+
+Blood Thinners: ${form.bloodThinners}
+
+Emergency Contact Name: ${form.emergencyContactName}
+
+Relationship: ${form.relationship}
+
 Emergency Contact: ${form.emergencyContact}
+
+Emergency Notes: ${form.emergencyNotes}
 `;
 
-    const blob = new Blob([data], { type: "text/plain" });
-    const url = URL.createObjectURL(blob);
+                  const blob = new Blob(
+                    [data],
+                    { type: "text/plain" }
+                  );
 
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = "Emergency_Medical_Details.txt";
-    a.click();
+                  const url =
+                    URL.createObjectURL(blob);
 
-    URL.revokeObjectURL(url);
-  }}
-  className="bg-green-600 text-white px-6 py-2 rounded hover:bg-green-700"
->
-  Download Emergency Details
-</button>
+                  const a =
+                    document.createElement("a");
+
+                  a.href = url;
+
+                  a.download =
+                    "Emergency_Medical_Details.txt";
+
+                  a.click();
+
+                  URL.revokeObjectURL(url);
+
+                }}
+                className="bg-green-600 hover:bg-green-700 text-white px-10 py-4 rounded-2xl text-lg font-bold shadow-lg"
+              >
+                Download Emergency Details
+              </button>
+
+            </div>
 
           </div>
+
         )}
 
       </div>
+
     </div>
   );
 };
