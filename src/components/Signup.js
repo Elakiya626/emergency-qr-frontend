@@ -22,10 +22,9 @@ const Signup = () => {
 
     try {
       await axios.post(
-        "http://10.55.27.22:5000/api/auth/register",
-        form
-      );
-
+  "https://emergency-qr-backend-1.onrender.com/api/auth/register",
+  form
+);
       alert("Signup successful!");
       navigate("/patient-form", {
         state: { username: form.username },

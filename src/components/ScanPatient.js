@@ -15,8 +15,8 @@ const ScanPatient = () => {
     const fetchPatient = async () => {
       try {
         const res = await axios.get(
-          `http://10.55.27.22:5000/api/patient/${qrId}`
-        );
+  `https://emergency-qr-backend-1.onrender.com/api/patient/${qrId}`
+);
 
         setPatient(res.data);
 

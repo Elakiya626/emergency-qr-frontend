@@ -54,12 +54,12 @@ const PatientForm = () => {
     try {
 
       const res = await axios.post(
-        "http://10.55.27.22:5000/api/auth/patient-details",
-        {
-          username,
-          ...form,
-        }
-      );
+  "https://emergency-qr-backend-1.onrender.com/api/auth/patient-details",
+  {
+    username,
+    ...form,
+  }
+);
 
       setQrId(res.data.qrId);
 
@@ -310,9 +310,9 @@ const PatientForm = () => {
                 <div className="bg-white p-5 rounded-3xl shadow-xl">
 
                   <QRCode
-                    value={`http://10.55.27.22:3000/scan/${qrId}`}
-                    size={220}
-                  />
+  value={`https://emergency-qr-frontend-qdiv.vercel.app/scan/${qrId}`}
+  size={220}
+/>
 
                 </div>
 
