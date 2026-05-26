@@ -2,10 +2,12 @@ import React, { useState } from "react";
 import axios from "axios";
 import { useLocation } from "react-router-dom";
 import QRCode from "react-qr-code";
+import html2canvas from "html2canvas";
 
 const PatientForm = () => {
 
   const location = useLocation();
+
   const username = location.state?.username;
 
   const [form, setForm] = useState({
@@ -37,29 +39,35 @@ const PatientForm = () => {
   const [qrId, setQrId] = useState(null);
 
   const handleChange = (e) => {
+
     setForm({
       ...form,
       [e.target.name]: e.target.value,
     });
+
   };
 
   const handleSubmit = async (e) => {
+
     e.preventDefault();
 
     if (!username) {
+
       alert("Session expired. Please login again.");
+
       return;
+
     }
 
     try {
 
       const res = await axios.post(
-  "https://emergency-qr-backend-1.onrender.com/api/auth/patient-details",
-  {
-    username,
-    ...form,
-  }
-);
+        "https://emergency-qr-backend-1.onrender.com/api/auth/patient-details",
+        {
+          username,
+          ...form,
+        }
+      );
 
       setQrId(res.data.qrId);
 
@@ -73,9 +81,33 @@ const PatientForm = () => {
       );
 
     }
+
+  };
+
+  const downloadQRImage = () => {
+
+    const card =
+      document.getElementById("qr-card");
+
+    html2canvas(card).then((canvas) => {
+
+      const link =
+        document.createElement("a");
+
+      link.download =
+        "EmergencyQRCard.png";
+
+      link.href =
+        canvas.toDataURL();
+
+      link.click();
+
+    });
+
   };
 
   return (
+
     <div className="min-h-screen bg-gradient-to-br from-indigo-100 via-white to-red-100 py-10 px-5 flex justify-center">
 
       <div className="bg-white shadow-2xl rounded-[35px] p-8 w-full max-w-6xl">
@@ -98,8 +130,6 @@ const PatientForm = () => {
           onSubmit={handleSubmit}
           className="grid md:grid-cols-2 gap-5"
         >
-
-          {/* PERSONAL DETAILS */}
 
           <input
             type="text"
@@ -138,8 +168,6 @@ const PatientForm = () => {
             className="border p-4 rounded-2xl"
           />
 
-          {/* CRITICAL CONDITIONS */}
-
           <textarea
             name="allergies"
             placeholder="Allergies"
@@ -167,8 +195,6 @@ const PatientForm = () => {
             onChange={handleChange}
             className="border p-4 rounded-2xl"
           />
-
-          {/* SPECIAL CONDITIONS */}
 
           <input
             type="text"
@@ -216,8 +242,6 @@ const PatientForm = () => {
             className="border p-4 rounded-2xl"
           />
 
-          {/* EMERGENCY CONTACT */}
-
           <input
             type="text"
             name="emergencyContactName"
@@ -264,11 +288,14 @@ const PatientForm = () => {
 
           <div className="mt-12">
 
-            <div className="bg-gradient-to-r from-red-600 to-indigo-700 text-white rounded-[35px] p-8 shadow-2xl">
+            <div
+              id="qr-card"
+              className="bg-gradient-to-r from-red-600 to-indigo-700 text-white rounded-[35px] p-8 shadow-2xl"
+            >
 
               <div className="flex flex-col md:flex-row justify-between items-center gap-8">
 
-                {/* LEFT SIDE */}
+                {/* LEFT */}
                 <div>
 
                   <h2 className="text-4xl font-extrabold mb-3">
@@ -310,9 +337,9 @@ const PatientForm = () => {
                 <div className="bg-white p-5 rounded-3xl shadow-xl">
 
                   <QRCode
-  value={`https://emergency-qr-frontend-qdiv.vercel.app/scan/${qrId}`}
-  size={220}
-/>
+                    value={`https://emergency-qr-frontend-qdiv.vercel.app/scan/${qrId}`}
+                    size={220}
+                  />
 
                 </div>
 
@@ -320,9 +347,10 @@ const PatientForm = () => {
 
             </div>
 
-            {/* DOWNLOAD BUTTON */}
-            <div className="text-center mt-8">
+            {/* DOWNLOAD BUTTONS */}
+            <div className="text-center mt-8 flex flex-col gap-4 items-center">
 
+              {/* TEXT DOWNLOAD */}
               <button
                 onClick={() => {
 
@@ -393,6 +421,14 @@ Emergency Notes: ${form.emergencyNotes}
                 Download Emergency Details
               </button>
 
+              {/* QR IMAGE DOWNLOAD */}
+              <button
+                onClick={downloadQRImage}
+                className="bg-blue-600 hover:bg-blue-700 text-white px-10 py-4 rounded-2xl text-lg font-bold shadow-lg"
+              >
+                Download QR Card Image
+              </button>
+
             </div>
 
           </div>
@@ -402,7 +438,9 @@ Emergency Notes: ${form.emergencyNotes}
       </div>
 
     </div>
+
   );
+
 };
 
 export default PatientForm;
