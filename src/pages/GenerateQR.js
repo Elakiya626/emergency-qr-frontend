@@ -2,7 +2,7 @@ import QRCode from "react-qr-code";
 
 const GenerateQR = ({ qrId }) => {
 
-  const qrUrl = `https://emergency-qr-frontend.vercel.app/scan/${qrId}`;
+  const qrUrl = `https://emergency-qr-frontend-qdiv.vercel.app/scan/${qrId}`;
 
   return (
     <div>
